@@ -15,7 +15,21 @@ class App extends React.Component {
     };
   }
 
+  updateField = name => e => {
+    this.setState({ [name]: e.target.value });
+  };
+
+  // updateTitleDescription = event => {
+  //   // console.log(event.target);
+  //   this.setState({
+  //     title: event.target.value,
+  //     description: event.target.value
+  //   });
+  // };
+
   render() {
+    console.log(this.state);
+
     return (
       <React.Fragment>
         <Typography align="center" variant="h2" gutterBottom>
@@ -29,6 +43,8 @@ class App extends React.Component {
                 placeholder="Title for this note…"
                 margin="normal"
                 fullWidth
+                onChange={this.updateField("title")}
+                value={this.state.title}
               />
             </Grid>
             <Grid item xs={12}>
@@ -38,6 +54,8 @@ class App extends React.Component {
                 multiline
                 rows="4"
                 fullWidth
+                onChange={this.updateField("description")}
+                value={this.state.description}
               />
             </Grid>
             <Fab color="secondary">
