@@ -1,9 +1,8 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-import Fab from "@material-ui/core/Fab";
-import Icon from "@material-ui/core/Icon";
+import NotesForm from "./notesForm";
+import NotesList from "./notesList";
 
 class App extends React.Component {
   constructor(props) {
@@ -18,6 +17,48 @@ class App extends React.Component {
   updateField = name => e => {
     this.setState({ [name]: e.target.value });
   };
+
+  /*
+  saveNote = () => {
+    this.setState({
+      notes: [
+        ...this.state.notes,
+        {
+          id: Date.now(),
+          title: this.state.title,
+          description: this.state.description
+        }
+      ]
+    });
+  };
+ */
+
+  saveNote = () => {
+    if (this.state.title && this.state.description) {
+      this.setState({
+        title: "",
+        description: "",
+        notes: [
+          ...this.state.notes,
+          {
+            id: Date.now(),
+            title: this.state.title,
+            description: this.state.description
+          }
+        ]
+      });
+      // this.clearValue();
+    }
+  };
+
+  deleNote = () => {};
+
+  /*  clearValue = () => {
+    this.setState({
+      title: "",
+      description: ""
+    });
+  }; */
 
   // updateTitleDescription = event => {
   //   // console.log(event.target);
@@ -36,31 +77,16 @@ class App extends React.Component {
           My Notes
         </Typography>
         <Grid container justify="center" spacing={2}>
+          <Grid>
+            <NotesList notes={this.state.notes} deleteNote={this.deleteNote} />
+          </Grid>
           <Grid item xs={8}>
-            <Grid item xs={12}>
-              <TextField
-                type="text"
-                placeholder="Title for this note…"
-                margin="normal"
-                fullWidth
-                onChange={this.updateField("title")}
-                value={this.state.title}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                placeholder="Start taking notes…"
-                margin="normal"
-                multiline
-                rows="4"
-                fullWidth
-                onChange={this.updateField("description")}
-                value={this.state.description}
-              />
-            </Grid>
-            <Fab color="secondary">
-              <Icon>edit_icon</Icon>
-            </Fab>
+            <NotesForm
+              title={this.state.title}
+              description={this.state.description}
+              updateField={this.updateField}
+              saveNote={this.saveNote}
+            />
           </Grid>
         </Grid>
       </React.Fragment>
