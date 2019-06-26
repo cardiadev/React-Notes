@@ -6,15 +6,21 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Typography } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const NotesList = props => {
   const { notes, deleteNote } = props;
   return (
     <List>
       {notes.length ? (
-        notes.map((notes, index) => (
-          <ListItem button key={notes.id}>
-            <ListItemText primary={notes.title} />
+        notes.map((note, index) => (
+          <ListItem
+            button
+            key={note.id}
+            component={Link}
+            to={`/view/${note.id}`}
+          >
+            <ListItemText primary={note.title} />
             <ListItemSecondaryAction>
               <IconButton onClick={() => deleteNote(index)}>
                 <DeleteIcon />
