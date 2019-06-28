@@ -1,11 +1,12 @@
 import React from "react";
+import axios from "axios";
 // Material UI
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 // React Router
-import { Link, Route } from "react-router-dom";
+import { Link, Route, Redirect } from "react-router-dom";
 // Notes Components
 import NotesForm from "./notesForm";
 import NotesList from "./notesList";
@@ -20,6 +21,19 @@ class App extends React.Component {
       description: "",
       notes: []
     };
+  }
+
+  componentDidMount() {
+    axios
+      .get("/notes.json")
+      .then(response => {
+        this.setState({
+          notes: [...response.data]
+        });
+      })
+      .catch(e => {
+        console.log(`Unable to fetch data ${e}`);
+      });
   }
 
   updateField = name => e => {
@@ -59,7 +73,7 @@ class App extends React.Component {
     }
   };
 
-  deleNote = index => {
+  deleteNote = index => {
     this.setState({
       notes: this.state.notes.filter((_, i) => i !== index)
     });
@@ -79,6 +93,10 @@ class App extends React.Component {
   //     description: event.target.value
   //   });
   // };
+
+  filterNote = id => {
+    return this.state.notes.filter(note => note.id === parseInt(id))[0];
+  };
 
   render() {
     /*     console.log(this.state);
@@ -107,7 +125,10 @@ class App extends React.Component {
             />
             <Route
               path="/view/:id"
-              render={props => <Note {...props} notes={this.state.notes} />}
+              render={props => {
+                const note = this.filterNote(props.match.params.id);
+                return note ? <Note note={note} /> : <Redirect to="/" />;
+              }}
             />
           </Grid>
         </Grid>
